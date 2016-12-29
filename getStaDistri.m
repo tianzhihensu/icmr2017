@@ -1,6 +1,6 @@
 function [ finalStates ] = getStaDistri( initialStates, transiMatrix1, transiMatrix2 )
 %GETSTADISTRI ramdom walk process simulation, get the final stationary distribution
-% ธลาช 
+% 
 % In the bipartite graph, two groups are seperate and the prob of reaching
 % the current node is greater than zero only in even times, then is this
 % function, in order to get the stationary distribution of prob of text

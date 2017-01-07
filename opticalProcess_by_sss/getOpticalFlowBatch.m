@@ -40,7 +40,7 @@ for i = 1:len
     framesStruct = dir(strcat(sourceDir, videoName, '\*'));
     frameLen = length(framesStruct);
     
-    mkdir(strcat(destiDir, videoName, '\'));
+  %  mkdir(strcat(destiDir, videoName, '\'));
     % resize original image
     tempFrame = strcat(fixStr1, num2str(0), fixStr2);
     tempImg = imread(strcat(sourceDir, videoName, '\', tempFrame));

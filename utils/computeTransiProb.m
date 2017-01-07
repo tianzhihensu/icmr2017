@@ -26,18 +26,47 @@ bgNums = size(bgMatrix, 1); % number of background regions
 transiProbMatrix1 = zeros(trNums, bgNums);
 transiProbMatrix2 = zeros(bgNums, trNums);
 
+similarityMatrix = zeros(trNums, bgNums);
+areaRatioMatrix = zeros(trNums, bgNums);
+
 for i = 1:trNums
     trVec = trMatrix(i, :);
+    trX = trVec(1, 1);
+    trY = trVec(1, 2);
+    trWidth = trVec(1, 3);
+    trHeight = trVec(1, 4);
     
     for j = 1:bgNums
         bgVec = bgMatrix(j, :);
+        bgX = bgVec(1, 1);
+        bgY = bgVec(1, 2);
+        bgWidth = bgVec(1, 3);
+        bgHeight = bgVec(1, 4);
         % aspect of optical flow
+        trBlock.blockX = vx(trY : trY + trHeight, trX: trX + trWidth);
+        trBlock.blockY = vy(trY : trY + trHeight, trX: trX + trWidth);
+        bgBlock.blockX = vx(bgY : bgY + bgHeight, bgX : bxX + bgWidth);
+        bgBlock.blockY = vy(bgY : bgY + bgHeight, bgX : bxX + bgWidth);
         
+        similarityMatrix(i, j) = getOptiFlowSimilarity(trBlock, bgBlock);
         
         % aspect of overlapping area ratio
-        areaRatio = getAreaRatio(bgVec, trVec);
+        areaRatioMatrix(i, j) = getAreaRatio(bgVec, trVec);
     end
 end
 
+% normalize similarityMatrix or use e^{similarity}
+maxVal = max(similarityMatrix(:));
+minVal = min(similarityMatrix(:));
+similarityMatrix = (similarityMatrix - minVal) ./ (maxVal - minVal);  % more samll, more similar
+
+% normalize areaRatioMatrix
+maxVal = max(areaRatioMatrix(:));
+minVal = min(areaRatioMatrix(:));
+areaRatioMatrix = (areaRatioMatrix - minVal) ./ (maxVal - minVal);
+
+% may be revised 
+transiProbMatrix1 = exp(-similarityMatrix) .* areaRatioMatrix;
+transiProbMatrix2 = transiProbMatrix1';
 end
 

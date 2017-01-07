@@ -1,4 +1,4 @@
-imgExample = imread('002502.png');
-boxes = runObjectness(imgExample,100);
-specialBoxes = boxes(95:99, :);
-figure,imshow(imgExample),drawBoxes(specialBoxes);
+imgExample = imread('0966.png');
+boxes = runObjectness(imgExample,10);
+% specialBoxes = boxes(95:99, :);
+figure,imshow(imgExample),drawBoxes(boxes);

@@ -2,9 +2,9 @@ function [ result ] = computeFactors( cue, windowInfo, LabSpaceImg, integralEdge
 %COMPUTEFACTORS compute the score of CC/ED/SS
 % 
 % Input: 
-%   cue: string of CC/ED/SS
+%   cue: string of CC/ED/SS/OF
 %   windowInfo: information of window, including topLeftX, topLeftY, width
-%   and height
+%   and height, and (selectable) thetaMap of optical flow
 %   LabSpaceImg:  image with LAB color space converted from RGB, if cue is
 %   not 'CC', then this parameter can be set to ''
 %   integralEdgeMap: result of canny detector, used for 'ED', if cue is not 'ED',
@@ -108,8 +108,34 @@ switch(cue)
         edgeNumsInnBox = integralEdgeMap(topLeftY_Inn + height_Inn, topLeftX_Inn + width_Inn) - integralEdgeMap(topLeftY_Inn, topLeftX_Inn);
         edgeNumsInnRing = edgeNumsWin - edgeNumsInnBox;
         
+        % inner ring's perimeter
+        lenInnRing = (width_Inn + height_Inn) * 2;
         
+        result = edgeNumsInnRing / lenInnRing;
         
+    case 'OF'  % optical flow factor
+        metric = 'chisq';
+        thetaMap = windowInfo.thetaMap;
+        OFStep = width / 2;
+        topLeftX_OF = topLeftX + OFStep;
+        topLeftY_OF = topLeftY + OFStep;
+        
+        tempTheta = ones(height, width);
+        tempTheta(topLeftY:topLeftY + height, topLeftX:topLeftX + width) = 2;
+        tempTheta(topLeftY_OF:topLeftY_OF + OFStep, topLeftX_OF:topLeftX_OF + OFStep) = 3;
+        indexWin = find(tempTheta == 2);
+        indexOF = find(tempTheta == 3);
+        
+        thetaOF = thetaMap(indexOF);
+        thetaOF = thetaOF';
+        thetaWin = thetaMap(indexWin);
+        thetaWin = thetaWin';
+        
+        thetaBinRange = -pi:pi/2:pi;
+        binCountsOF = histc(thetaOF, thetaBinRange);
+        binCountsWin = histc(thetaWin, thetaBinRange);
+        
+        result = new_pdist2(binCountsOF, binCountsWin, metric);
 end
 
 end

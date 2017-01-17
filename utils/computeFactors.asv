@@ -76,9 +76,6 @@ switch(cue)
         LBinRange = 0:LStep:100;
         LBinCountsSur = histc(LSur, LBinRange);
         LBinCountsWin = histc(LWin, LBinRange);
-        % normalize
-        LBinCountsSur = LBinCountsSur ./ sum(LBinCountsSur);
-        LBinCountsWin = LBinCountsWin ./ sum(LBinCountsWin);
         LScore = new_pdist2(LBinCountsSur, LBinCountsWin, metric);
         
         % a
@@ -87,16 +84,13 @@ switch(cue)
         aBinCountsSur = histc(aSur, aBinRange);
         aBinCountsWin = histc(aWin, aBinRange);
         % normalize
-        aBinCountsSur = aBinCountsSur ./ sum(aBinCountsSur);
-        aBinCountsWin = aBinCountsWin ./ sum(aBinCountsWin);
+        aBinCountsSur = aBinCountsSur ./sum(aBinCountsSur);
+        aBinCountsWin = aBinCountsWin./
         aScore = new_pdist2(aBinCountsSur, aBinCountsWin, metric);
         
         % b, same to a
         bBinCountsSur = histc(bSur, aBinRange);
         bBinCountsWin = histc(bWin, aBinRange);
-        % normalize
-        bBinCountsSur = bBinCountsSur ./ sum(bBinCountsSur);
-        bBinCountsWin = bBinCountsWin ./ sum(bBinCountsWin);
         bScore = new_pdist2(bBinCountsSur, bBinCountsWin, metric);
         
         % final resut
@@ -144,9 +138,7 @@ switch(cue)
         thetaBinRange = -pi:pi/2:pi;
         binCountsOF = histc(thetaOF, thetaBinRange);
         binCountsWin = histc(thetaWin, thetaBinRange);
-        % normalize
-        binCountsOF = binCountsOF ./ sum(binCountsOF);
-        binCountsWin = binCountsWin ./ sum(binCountsWin);
+        
         result = new_pdist2(binCountsOF, binCountsWin, metric);
 end
 

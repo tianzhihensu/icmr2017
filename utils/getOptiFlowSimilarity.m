@@ -1,5 +1,5 @@
 function [ similarity ] = getOptiFlowSimilarity( block1, block2 )
-%GETOPTIFLOWSIMILARITY the similarity of two data sets.
+%GETOPTIFLOWSIMILARITY compute the similarity of two data sets.
 %   
 % Input:
 %   block1: a struct containing optical flow value of both x and y axis.

@@ -1,7 +1,6 @@
 clc;
 clear;
 
-sourceDir = 'E:\研究生\研二下\ICPR\experiments\spit_frames\ch3_train_frames\';
-postfix = '';
-destiDir = '../../optical_flow_dat_file/';
-getOpticalFlowBatch(sourceDir, postfix, destiDir);
+sourceDir = 'E:\研究生\研三上\icmr2017\code\utils\trainSet\all\';
+destiDir = 'E:\研究生\研三上\icmr2017\code\utils\trainSet\optical_flow_mat\';
+getOpticalFlowBatch(sourceDir, destiDir);

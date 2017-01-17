@@ -1,4 +1,4 @@
-function [  ] = getOpticalFlowBatch( sourceDir, postfix, destiDir )
+function [  ] = getOpticalFlowBatch( sourceDir, destiDir )
 %GETOPTICALFLOWBATCH get the optical flow of each frame of all videos under
 % a specific directory, and save the result into .mat file with the same
 % name.
@@ -6,7 +6,6 @@ function [  ] = getOpticalFlowBatch( sourceDir, postfix, destiDir )
 % Input: 
 %   sourceDir: directory of files, which will be taken to compute
 %   the optical flow for each frame.
-%   postfix:
 %   destiDir: directory of .mat files
 %
 % Output:
@@ -14,18 +13,7 @@ function [  ] = getOpticalFlowBatch( sourceDir, postfix, destiDir )
 %
 %
 
-% filesStruct = dir(strcat(sourceDir, '*', postfix));
-
- filesStruct = {
-'Video_2_1_2'
-'Video_4_4_2'
-'Video_7_5_1'
-'Video_8_5_1'
-'Video_10_1_1'
-'Video_13_4_1'
-'Video_16_3_2'
-'Video_18_3_1'
-};
+filesStruct = dir(strcat(sourceDir, '*'));
 
 len = length(filesStruct);
 fixStr1 = 'image_';

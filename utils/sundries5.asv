@@ -1,0 +1,13 @@
+clc;
+clear;
+
+% function: find missing image
+
+txtPath = './object-methods/objRectInfos.txt';
+fid = fopen(txtPath);
+
+imgPath = './trainSet/all/';
+
+while feof(fid) == 0
+    textLine = fgetl
+end

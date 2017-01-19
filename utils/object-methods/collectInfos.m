@@ -178,7 +178,7 @@ function [result] = classifyWindow(topLeftList, width, height, objInfos, LabSpac
         theta = 0;  %%%%%%%%%%%%%%%%%%%%%%%%% need to be discussed later
         OFValue = computeFactors(cue, windowInfo, LabSpaceImg, integralEdgeMap, theta);
         
-        if positiveNums
+        if positiveFlag
             CCObj = [CCObj, CCValue];
             EDObj = [EDObj, EDValue];
             OFObj = [OFObj, OFValue];

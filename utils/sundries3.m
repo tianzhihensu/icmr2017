@@ -1,7 +1,7 @@
 clc;
 clear;
 
-% function: generate the optical flow of a specific image
+% function: generate the optical flow of those specific images
 
 addpath('../OpticalFlow');
 

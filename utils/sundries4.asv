@@ -1,0 +1,24 @@
+clc;
+clear;
+
+% function: find missing image by txt
+
+txtPath = './object-methods/objRectInfos.txt';
+fid = fopen(txtPath);
+
+imgPath = './trainSet/all/';
+
+abc = '';
+
+while feof(fid) == 0
+    textLine = fgetl(fid);
+    
+    
+    if isempty(strfind(abc, textLine)) == 0
+        fileList = dir(strcat(imgPath, textLine));
+        if size(fileList, 1) == 0
+            disp(textLine);
+        end
+    end
+    abc = strcat(abc, textLine);
+end

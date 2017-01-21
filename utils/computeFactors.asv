@@ -25,7 +25,7 @@ switch(cue)
     case 'CC'  % color contrast
         metric = 'chisq';
         thetaCC = theta;
-        enlargedStep = min(max(width / 4, 10), 40);  % discuss later  current: [10, 40]
+        enlargedStep = round(min(max(width / 4, 10), 40));  % discuss later  current: [10, 40]
         
         % get surrounding window information
         topLeftX_CC = max(topLeftX - enlargedStep, 1);
@@ -76,6 +76,9 @@ switch(cue)
         LBinRange = 0:LStep:100;
         LBinCountsSur = histc(LSur, LBinRange);
         LBinCountsWin = histc(LWin, LBinRange);
+        % normalize
+        LBinCountsSur = LBinCountsSur ./ sum(LBinCountsSur);
+        LBinCountsWin = LBinCountsWin ./ sum(LBinCountsWin);
         LScore = new_pdist2(LBinCountsSur, LBinCountsWin, metric);
         
         % a
@@ -84,13 +87,16 @@ switch(cue)
         aBinCountsSur = histc(aSur, aBinRange);
         aBinCountsWin = histc(aWin, aBinRange);
         % normalize
-        aBinCountsSur = aBinCountsSur ./sum(aBinCountsSur);
-        aBinCountsWin = aBinCountsWin./
+        aBinCountsSur = aBinCountsSur ./ sum(aBinCountsSur);
+        aBinCountsWin = aBinCountsWin ./ sum(aBinCountsWin);
         aScore = new_pdist2(aBinCountsSur, aBinCountsWin, metric);
         
         % b, same to a
         bBinCountsSur = histc(bSur, aBinRange);
         bBinCountsWin = histc(bWin, aBinRange);
+        % normalize
+        bBinCountsSur = bBinCountsSur ./ sum(bBinCountsSur);
+        bBinCountsWin = bBinCountsWin ./ sum(bBinCountsWin);
         bScore = new_pdist2(bBinCountsSur, bBinCountsWin, metric);
         
         % final resut
@@ -98,7 +104,7 @@ switch(cue)
         
     case 'ED'
         thetaED = theta;
-        shrinkStep = max(min(width/4, 40), 10);  % discuss later, current: [10, 40]
+        shrinkStep = round(max(min(width/4, 40), 10));  % discuss later, current: [10, 40]
         
         % get the cordinate of inner ring
         topLeftX_Inn = topLeftX + shrinkStep;
@@ -120,9 +126,10 @@ switch(cue)
     case 'OF'  % optical flow factor
         metric = 'chisq';
         thetaMap = windowInfo.thetaMap;
-        OFStep = max(min(width/4, 40), 10);  % discuss later, current: [10, 40]
+        OFStep = round(max(min(width/4, 40), 10));  % discuss later, current: [10, 40]
         topLeftX_OF = topLeftX + OFStep;
         topLeftY_OF = topLeftY + OFStep;
+        width_OF = 
         
         tempTheta = ones(height, width);
         tempTheta(topLeftY:topLeftY + height, topLeftX:topLeftX + width) = 2;
@@ -138,7 +145,9 @@ switch(cue)
         thetaBinRange = -pi:pi/2:pi;
         binCountsOF = histc(thetaOF, thetaBinRange);
         binCountsWin = histc(thetaWin, thetaBinRange);
-        
+        % normalize
+        binCountsOF = binCountsOF ./ sum(binCountsOF);
+        binCountsWin = binCountsWin ./ sum(binCountsWin);
         result = new_pdist2(binCountsOF, binCountsWin, metric);
 end
 

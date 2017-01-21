@@ -25,7 +25,7 @@ switch(cue)
     case 'CC'  % color contrast
         metric = 'chisq';
         thetaCC = theta;
-        enlargedStep = min(max(width / 4, 10), 40);  % discuss later  current: [10, 40]
+        enlargedStep = round(min(min(width, height) / 4, 40));  % discuss later  current: [10, 40]
         
         % get surrounding window information
         topLeftX_CC = max(topLeftX - enlargedStep, 1);
@@ -104,13 +104,21 @@ switch(cue)
         
     case 'ED'
         thetaED = theta;
-        shrinkStep = max(min(width/4, 40), 10);  % discuss later, current: [10, 40]
+        shrinkStep = round(min(min(width, height) / 4, 40));  % discuss later, current: [10, 40]
         
         % get the cordinate of inner ring
         topLeftX_Inn = topLeftX + shrinkStep;
         topLeftY_Inn = topLeftY + shrinkStep;
         width_Inn = width - 2 * shrinkStep;
         height_Inn = height - 2 * shrinkStep;
+        
+        %%%%%%%%%%%%%%% test %%%%%%%%%%%%%%%%
+        [aHeight, aWidth] = size(integralEdgeMap);
+        if (topLeftY_Inn + height_Inn) > aHeight || topLeftY_Inn > aHeight || (topLeftX_Inn + width_Inn) > aWidth || topLeftX_Inn > aWidth
+            disp('something is wrong!');
+            a = 1;
+            b = a + 1;
+        end
         
         % calculate the edge numbers of inner-box and outer-box, then the
         % subtract of them are the result of inner-ring
@@ -126,13 +134,18 @@ switch(cue)
     case 'OF'  % optical flow factor
         metric = 'chisq';
         thetaMap = windowInfo.thetaMap;
-        OFStep = max(min(width/4, 40), 10);  % discuss later, current: [10, 40]
+        OFStep = round(min(min(width, height) / 4, 40));  % discuss later, current: [10, 40]
         topLeftX_OF = topLeftX + OFStep;
         topLeftY_OF = topLeftY + OFStep;
+        width_OF = width - 2 * OFStep;
+        height_OF = height - 2 * OFStep;
+        
+        %%%%%%%%%%%%%%% test %%%%%%%%%%%%%%%%
+        [bHeight, bWidth] = size(thetaMap);
         
         tempTheta = ones(height, width);
         tempTheta(topLeftY:topLeftY + height, topLeftX:topLeftX + width) = 2;
-        tempTheta(topLeftY_OF:topLeftY_OF + OFStep, topLeftX_OF:topLeftX_OF + OFStep) = 3;
+        tempTheta(topLeftY_OF:topLeftY_OF + height_OF, topLeftX_OF:topLeftX_OF + width_OF) = 3;
         indexWin = find(tempTheta == 2);
         indexOF = find(tempTheta == 3);
         

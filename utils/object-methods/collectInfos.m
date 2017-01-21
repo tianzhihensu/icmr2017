@@ -31,7 +31,9 @@ EDBg = [];
 OFObj = [];
 OFBg = [];
 
-scaleNums = round(winNums / length(winScale));
+objNums = size(objInfos, 1);
+
+scaleNums = round(winNums / objNums);
 [imgHeight, imgWidth, imgLayer] = size(im);
 
 % get the Lab space
@@ -47,18 +49,20 @@ load(strcat('../trainSet/optical_flow_mat/', tempStr1{1}, '_opti_flow.mat'));
 thetaMap = atan2(vy, vx);
 
 % tranverse each scale
-for i=1:length(winScale)
+for i=1:objNums
     % compute the valid width, namely making sure the generated rectangle
     % is totally covered by the current image
-    validWidth = imgWidth - winScale(i);
-    validHeight = imgHeight - winScale(i);
+    objWidth = objInfos(i, 3);
+    objHeight = objInfos(i, 4);
+    validWidth = imgWidth - objWidth;
+    validHeight = imgHeight - objHeight;
     topLeftX = 1 + round((validWidth - 1) .* rand(scaleNums, 1));
     topLeftY = 1 + round((validHeight - 1) .* rand(scaleNums, 1));
     topLeftList = [topLeftX, topLeftY]; 
     
     % collect the information under a specific scale, details see this
     % function.
-    result = classifyWindow(topLeftList, winScale(i), winScale(i), objInfos, LabSpaceImg, edgeMap, thetaMap);
+    result = classifyWindow(topLeftList, objWidth, objHeight, objInfos, LabSpaceImg, edgeMap, thetaMap);
     
     % collect each data under a specific scale
     pWinNums = pWinNums + result.positiveNums;
@@ -90,7 +94,7 @@ function [result] = classifyWindow(topLeftList, width, height, objInfos, LabSpac
 % Input:
 %   topLeftList: a list of cordinate of windows, each row represents
 %   the left-top-pint cordinate of a window.
-%   width:
+%   width: 
 %   height:
 %   objInfos: a list of cordinate of ground truth rectangles.
 %   LabSpaceImg: the Lab color space of current image.
